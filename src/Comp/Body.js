@@ -10,6 +10,14 @@ export default function Body() {
 
     console.log("Temp", dcTrackObject);
 
+    /**
+     * The function `findBestMatches` takes in a list of keys and an input phrase, removes special
+     * characters, compares the similarity of each key to the input phrase, and returns the four best
+     * matching keys.
+     * @param input - The `input` parameter is a string that represents the input phrase or text.
+     * @returns The function `findBestMatches` returns an array of the best matching phrases from the
+     * `firstKey` array based on the similarity scores calculated using the `inputPhrase`.
+     */
     function removeSpecialCharacters(input) {
         return input.replace(/[^\w\s]/g, "");
     }
@@ -33,73 +41,37 @@ export default function Body() {
         return bestMatches;
     }
 
+    let newObjArray = [];
+
+    /* This code block is responsible for processing the user input data and creating a new array of
+objects (`newObjArray`) based on the matching keys between the user input data and the
+`dcTrackObject.Data` array. */
     if (userInputData !== undefined) {
         let userInputDataArray = JSON.parse(userInputData);
-
-        // dcTrackObject.Data.map((importName, index) => {
-        let importNames = [
-            "# Operation",
-            "Object",
-            "Name",
-            "Make",
-            "Model",
-            "Location",
-            "Cabinet",
-            "U Position",
-            "Rails Used",
-            "Orientation",
-        ];
-
-        let newObj = {};
-
-        for (let i = 0; i < importNames.length; i++) {
-            // userInputDataArray.map((items, index) => {
-            // let first = userInputDataArray[index];
-            let first = userInputDataArray[0];
-            let firstKey = Object.keys(first);
-
-            const match = importNames[i];
-            let bestMatches = findBestMatches(firstKey, match);
-            let bestMatch = bestMatches[0];
-            // console.log(bestMatch);
-            let value = first[bestMatch];
-            // let object = {
-            //     [match]: value,
-            // };
-            newObj[match] = value;
-            // object = { ...object, ...first };
-            // delete object[bestMatch];
-            // userInputDataArray[0] = object;
-            // userInputDataArray[index] = object;
-            delete first[bestMatch];
-
-            //}
-            //);
-            console.log(newObj);
-        }
-        // });
-
-        // userInputDataArray.map((items) => {
-        //     delete Object.assign(items, { match: items.bestMatch }).bestMatch;
-        // });
-
-        // need to replace the key in userInputDataArray with the match
-
-        // console.log("Input Parsed", userInputDataArray[0]);
-        // console.log("First", first);
-        // console.log("First Key", firstKey);
-        // console.log(`Matches to : "${match}"`, bestMatches);
-        // console.log("Best Match :", value);
-        // console.log("Array Changed", userInputDataArray);
+        userInputDataArray.forEach((element) => {
+            let newObj = {};
+            let importNames = dcTrackObject.Data;
+            for (let i = 0; i < importNames.length; i++) {
+                let first = element;
+                let firstKey = Object.keys(first);
+                const match = importNames[i];
+                /* The line `let bestMatches = findBestMatches(firstKey, match);` is calling the `findBestMatches`
+                function and passing in two arguments: `firstKey` and `match`. */
+                let bestMatches = findBestMatches(firstKey, match);
+                let bestMatch = bestMatches[0];
+                console.log(bestMatch);
+                let value = first[bestMatch];
+                newObj[match] = value;
+                delete first[bestMatch];
+            }
+            newObjArray.push(newObj);
+        });
     }
 
-    // let jsonLink;
-
-    // function jsonLinkAssignment(e) {
-    //     jsonLink = e.target.value;
-    //     console.log(jsonLink);
-    // }
-
+    /* The `return (` statement is the start of the JSX code that will be rendered as the output of the
+`Body` component. It is returning a JSX element, which is a representation of the user interface.
+The JSX code inside the `return (` statement defines the structure and content of the component's
+   output. */
     return (
         <div className="flex flex-col justify-end">
             <InputField
@@ -125,14 +97,16 @@ export default function Body() {
                 <option value="Rack PDU.json">Rack PDU</option>
                 <option value="UPS.json">UPS</option>
             </select>
-
+            */}
             {userInputData !== undefined ? (
                 <div>
                     <TableView data={JSON.parse(userInputData)} />
+                    <div className="pt-8"></div>
+                    <TableView data={newObjArray} />
                 </div>
             ) : (
                 <div>test2</div>
-            )} */}
+            )}
             {/* {userInputData && dcTrackObject && (
                 <div>
                     <div>
